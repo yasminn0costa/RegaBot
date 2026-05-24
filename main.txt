@@ -1,1 +1,83 @@
-adicionem o código aqui
+----------- adicionem o código aqui ----------------
+#include <DHT.h>
+
+#define PIN_SOLO   A0      //YL-69 (SOLO)
+#define PIN_BOIA   7       // BOIA (POSSIVELMENTE VAI SER ALTERADO QUANDO SOUBER O MODELO)
+#define PIN_DHT    4       // DHT11 (temperatura e umidade do ar)
+
+DHT dht(PIN_DHT, DHTTYPE);
+
+float temperatura = 0.0;
+float umidadeAr = 0.0;
+int umidadeSoloPercentual = 0;
+int nivelAguaPercentual = 0;
+
+void lerSensores();
+void enviarDadosApp();
+
+void setup() {
+ 
+  Serial.begin(9600);     
+  Serial1.begin(9600);    
+
+  dht.begin();
+  pinMode(PIN_BOIA, INPUT_PULLUP);  
+
+  Serial.println("RegaBot - Módulo de Sensores Iniciado");
+}
+
+void loop() {
+  lerSensores();      
+  enviarDadosApp();   
+  delay(2000);        
+}
+-----função de leitura de dados------
+void lerSensores() {
+  
+  int valorBrutoSolo = analogRead(PIN_SOLO);
+  umidadeSoloPercentual = map(valorBrutoSolo, 0, 876, 0, 100);
+  umidadeSoloPercentual = constrain(umidadeSoloPercentual, 0, 100);
+ 
+  int estadoBoia = digitalRead(PIN_BOIA);
+  if (estadoBoia == HIGH) {
+    nivelAguaPercentual = 100;   
+  } else {
+    nivelAguaPercentual = 0;     
+  }
+ 
+  float t = dht.readTemperature();
+  float h = dht.readHumidity();
+  if (!isnan(t) && !isnan(h)) {
+    temperatura = t;
+    umidadeAr = h;
+  } else {
+    Serial.println("Erro na leitura do DHT11");
+  }
+
+  //  caso seja necessario debug no monitor serial (computador) 
+  Serial.println("--- Leitura dos Sensores ---");
+  Serial.print("Solo (bruto): "); Serial.print(valorBrutoSolo);
+  Serial.print(" -> Solo (%): "); Serial.println(umidadeSoloPercentual);
+  Serial.print("Nível água: "); Serial.println(nivelAguaPercentual);
+  Serial.print("Temperatura: "); Serial.print(temperatura); Serial.println(" °C");
+  Serial.print("Umidade ar: "); Serial.print(umidadeAr); Serial.println(" %");
+  Serial.println("----------------------------");
+}
+
+------funcao de envio de dados --------------
+void enviarDadosApp() {
+  Serial1.print(temperatura);
+  Serial1.print("|");
+  Serial1.print(umidadeAr);
+  Serial1.print("|");
+  Serial1.print(umidadeSoloPercentual);
+  Serial1.print("|");
+  Serial1.println(nivelAguaPercentual);
+
+  //  caso seja necessario debug no monitor serial (computador) 
+  Serial.print("Enviado ao app: ");
+  Serial.print(temperatura); Serial.print("|");
+  Serial.print(umidadeAr); Serial.print("|");
+  Serial.print(umidadeSoloPercentual); Serial.print("|");
+  Serial.println(nivelAguaPercentual);
+}
