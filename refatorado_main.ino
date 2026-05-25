@@ -4,6 +4,7 @@
 #define PIN_SOLO      A0      // YL-69 (SOLO)
 #define PIN_BOIA      7       // BOIA  (POSSIVELMENTE VAI SER ALTERADO QUANDO SOUBER O MODELO)
 #define PIN_DHT       4       // DHT11 (temperatura e umidade do ar)
+#define DHTTYPE DHT11
 
 #define BAUD_SERIAL   9600
 #define BAUD_SERIAL1  9600
