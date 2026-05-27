@@ -43,7 +43,7 @@ void loop() {
     default: break;
   }
   enviarDadosApp();   
-  delay(1200);        
+  delay(2000);        
 }
 //-----função de leitura dos sensores------
 void lerSensores() {
@@ -91,7 +91,6 @@ void enviarDadosApp() {                             //envia os dados dos sensore
   Serial1.print(dados[1]);
   Serial1.print("|");
   Serial1.print(dados[2]);
-  Serial1.flush();
 
   //  caso seja necessario debug no monitor serial (computador) 
   Serial.print("Enviado ao app: ");
