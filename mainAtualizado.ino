@@ -6,6 +6,7 @@
 #define PIN_BOIA   7       // BOIA (POSSIVELMENTE VAI SER ALTERADO QUANDO SOUBER O MODELO)
 #define PIN_DHT    4       // DHT11 (temperatura e umidade do ar)
 #define DHTTYPE    DHT11
+#define rele 5         //pino do modulo rele
 
 DHT dht(PIN_DHT, DHTTYPE);  //objeto da classe DHT
 RTC_DS3231 rtc;             //objeto da classe RTC_DS3231
@@ -132,6 +133,9 @@ void IrrigacaoPorHorario(){
   }
 }
 
-void LigarBomba(){
+void LigarBomba(){ //ainda sofrerá alterações
 
+  digitalWrite(rele, HIGH); //liga a bomba toda vez que a função for chamada
+  delay(6000);
+  digitalWrite(rele, LOW);  //depois de um intervalo de tempo a bomba será desligada
 }
