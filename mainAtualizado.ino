@@ -137,6 +137,13 @@ void IrrigacaoPorHorario(){
 void LigarBomba(){ //ainda sofrerá alterações
 
   digitalWrite(rele, HIGH); //liga a bomba toda vez que a função for chamada
-  delay(6000);
-  digitalWrite(rele, LOW);  //depois de um intervalo de tempo a bomba será desligada
+  
+  if(temperatura>=26){ //quando estiver mais quente, a planta será irrigada por mais tempo
+     delay(10000); //tempo será ajustado com testes experimentais
+     digitalWrite(rele, LOW);  //depois de um intervalo de tempo a bomba será desligada
+  }
+  else{ //temperatura normal
+    delay(5000);
+    digitalWrite(rele, LOW);  //depois de um intervalo de tempo a bomba será desligada
+}
 }
