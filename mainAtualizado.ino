@@ -30,6 +30,7 @@ void setup() {
   dht.begin();                             //inicia o objeto referente ao DHT11
   rtc.begin();                             //inicia o objeto referente ao módulo RTC DS3231
   pinMode(PIN_BOIA, INPUT_PULLUP);         //configura o pino conectado à boia
+  pinMode(rele, OUTPUT);
   Serial.println("RegaBot - Módulo de Sensores Iniciado");
   rtc.adjust(DateTime(2026, 5, 26, 11, 31, 00));              //ajustar tempo: ano, mes, dia, horas, minutos, segundos. Ajustar apenas uma vez
   delay(100);
