@@ -31,8 +31,9 @@ void setup() {
   rtc.begin();                             //inicia o objeto referente ao módulo RTC DS3231
   pinMode(PIN_BOIA, INPUT_PULLUP);         //configura o pino conectado à boia
   pinMode(rele, OUTPUT);
+  digitalWrite(rele,HIGH);
   Serial.println("RegaBot - Módulo de Sensores Iniciado");
-  rtc.adjust(DateTime(2026, 5, 26, 11, 31, 00));              //ajustar tempo: ano, mes, dia, horas, minutos, segundos. Ajustar apenas uma vez
+  //rtc.adjust(DateTime(2026, 5, 29, 14, 30, 00));              //ajustar tempo: ano, mes, dia, horas, minutos, segundos. Descomentar quando quiser ajustar
   delay(100);
 }
 
@@ -99,15 +100,25 @@ void enviarDadosApp() {                             //envia os dados dos sensore
   Serial.print(temperatura); Serial.print("|");
   Serial.print(umidadeAr); Serial.print("|");
   Serial.print(umidadeSoloPercentual); Serial.print("|");
+  Serial.print(nivelAguaPercentual); Serial.print("|");
   Serial.print(dados[1]); Serial.print("|");
-  Serial.print(dados[2]); Serial.print("|");
-  Serial.println(nivelAguaPercentual);
+  Serial.println(dados[2]);
+  DateTime hora = rtc.now();
+  Serial.print("Horario Atual: ");
+  Serial.print(hora.hour());Serial.print(":");Serial.println(hora.minute());
+  Serial.print("Recebido do app: ");
+  for(int i=0;i<4;i++){
+   Serial.print("#"); Serial.print(dados[i]); Serial.print("#");
+  }
+  Serial.println("");
+  
 }
 
 void LerDadosApp(){
   if(Serial1.available() > 0){                                          //verifica se há dados disponíveis no buffer
     int delimitador;                                                    //variável para pegar o indicice do caracter "|"
-    String DadosNaoTratados = Serial1.readString();                     //variável que recebe a string com os dados
+    String DadosNaoTratados = Serial1.readStringUntil('#');                     //variável que recebe a string com os dados
+    teste = DadosNaoTratados;
     for(int i=0; i < 4; i++){
       delimitador = DadosNaoTratados.indexOf('|');                      //recebe o indice do primeiro "|" na string
       if(delimitador >= 0){
@@ -136,14 +147,14 @@ void IrrigacaoPorHorario(){
 
 void LigarBomba(){ //ainda sofrerá alterações
 
-  digitalWrite(rele, HIGH); //liga a bomba toda vez que a função for chamada
+  digitalWrite(rele, LOW); //liga a bomba toda vez que a função for chamada
   
   if(temperatura>=26){ //quando estiver mais quente, a planta será irrigada por mais tempo
      delay(10000); //tempo será ajustado com testes experimentais
-     digitalWrite(rele, LOW);  //depois de um intervalo de tempo a bomba será desligada
+     digitalWrite(rele, HIGH);  //depois de um intervalo de tempo a bomba será desligada
   }
   else{ //temperatura normal
     delay(5000);
-    digitalWrite(rele, LOW);  //depois de um intervalo de tempo a bomba será desligada
-}
+    digitalWrite(rele, HIGH);  //depois de um intervalo de tempo a bomba será desligada
+  }
 }
