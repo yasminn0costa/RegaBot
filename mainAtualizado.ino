@@ -118,7 +118,6 @@ void LerDadosApp(){
   if(Serial1.available() > 0){                                          //verifica se há dados disponíveis no buffer
     int delimitador;                                                    //variável para pegar o indicice do caracter "|"
     String DadosNaoTratados = Serial1.readStringUntil('#');                     //variável que recebe a string com os dados
-    teste = DadosNaoTratados;
     for(int i=0; i < 4; i++){
       delimitador = DadosNaoTratados.indexOf('|');                      //recebe o indice do primeiro "|" na string
       if(delimitador >= 0){
