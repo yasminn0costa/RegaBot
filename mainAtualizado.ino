@@ -23,6 +23,7 @@ void enviarDadosApp();            //função que envia os dados para o aplicativ
 void LigarBomba();                //função que liga a bomba sempre que chamada (Yasminn)
 void IrrigacaoPorHorario();       //função que liga a bomba segundo um horário definido no aplicativo
 void LerDadosApp();               //função para ler as configurações enviados pelo aplicativo
+void irrigacaoAutomatica();       // manter a umidade do solo entre 25-50%
 
 void setup() {
   Serial.begin(9600);                      //inicia a comunicação serial com o monitor
@@ -42,7 +43,7 @@ void loop() {
   LerDadosApp();
   switch(dados[0]){   //o primeiro elemento de dados[] armazena o modo de operação; 1 para irrigação por horário, 0 para irrigação automática
     case 1: IrrigacaoPorHorario(); break;
-    case 0: //(Ea-Nazir) adicione aqui a chamada da função que vai fazer a irrigacao de forma automatica
+    case 0: irrigacaoAutomatica(); break;
     default: break;
   }
   enviarDadosApp();   
@@ -130,6 +131,14 @@ void LerDadosApp(){
     }
   }
 }
+
+
+void irrigacaoAutomatica() {
+  if (umidadeSoloPercentual <= 35) {
+    LigarBomba();
+  }
+}
+
 
 void IrrigacaoPorHorario(){
   unsigned long inicio;
