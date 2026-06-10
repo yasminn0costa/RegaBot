@@ -143,7 +143,7 @@ void irrigacaoAutomatica() {
 
 
 void IrrigacaoPorHorario(){
-  unsigned long inicio = 0;
+  unsigned long inicio;
   DateTime agora = rtc.now();                                               //lê o horário atual
   if((dados[1]==agora.hour())&&(dados[2]==agora.minute())&&!flagBomba){     //compara se o horário atual é igual ao horário definido para ligar a bomba
     LigarBomba();                                                           //chama a função LigarBomba()
