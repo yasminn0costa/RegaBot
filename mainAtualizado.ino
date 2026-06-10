@@ -24,6 +24,7 @@ void LigarBomba();                //função que liga a bomba sempre que chamada
 void IrrigacaoPorHorario();       //função que liga a bomba segundo um horário definido no aplicativo
 void LerDadosApp();               //função para ler as configurações enviados pelo aplicativo
 void irrigacaoAutomatica();       // manter a umidade do solo entre 25-50%
+void checarIrrigacaoManual();     // acionamento manualmente a bomba, se o botao no app for apertado
 
 void setup() {
   Serial.begin(9600);                      //inicia a comunicação serial com o monitor
@@ -46,6 +47,7 @@ void loop() {
     case 0: irrigacaoAutomatica(); break;
     default: break;
   }
+  checarIrrigacaoManual();
   enviarDadosApp();   
   delay(2000);        
 }
@@ -164,5 +166,11 @@ void LigarBomba(){ //ainda sofrerá alterações
   else{ //temperatura normal
     delay(5000);
     digitalWrite(rele, HIGH);  //depois de um intervalo de tempo a bomba será desligada
+  }
+}
+
+void checarIrrigacaoManual() {
+  if (dados[3] == 1) {
+    LigarBomba();
   }
 }
