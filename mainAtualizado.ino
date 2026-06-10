@@ -55,7 +55,7 @@ void loop() {
 void lerSensores() {
   
   int valorBrutoSolo = analogRead(PIN_SOLO);
-  umidadeSoloPercentual = map(valorBrutoSolo, 0, 876, 0, 100);
+  umidadeSoloPercentual = map(valorBrutoSolo, 550, 850 , 100, 0);
   umidadeSoloPercentual = constrain(umidadeSoloPercentual, 0, 100);
  
   int estadoBoia = digitalRead(PIN_BOIA);
@@ -136,14 +136,14 @@ void LerDadosApp(){
 
 
 void irrigacaoAutomatica() {
-  if (umidadeSoloPercentual <= 35) {
+  if (umidadeSoloPercentual <= 5) {
     LigarBomba();
   }
 }
 
 
 void IrrigacaoPorHorario(){
-  unsigned long inicio;
+  unsigned long inicio = 0;
   DateTime agora = rtc.now();                                               //lê o horário atual
   if((dados[1]==agora.hour())&&(dados[2]==agora.minute())&&!flagBomba){     //compara se o horário atual é igual ao horário definido para ligar a bomba
     LigarBomba();                                                           //chama a função LigarBomba()
