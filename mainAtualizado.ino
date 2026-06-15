@@ -3,7 +3,6 @@
 #include <RTClib.h>
 
 #define PIN_SOLO   A0      //YL-69 (SOLO)
-#define PIN_BOIA   7       // BOIA (POSSIVELMENTE VAI SER ALTERADO QUANDO SOUBER O MODELO)
 #define PIN_DHT    4       // DHT11 (temperatura e umidade do ar)
 #define DHTTYPE    DHT11
 #define rele 5         //pino do modulo rele
@@ -14,7 +13,6 @@ RTC_DS3231 rtc;             //objeto da classe RTC_DS3231
 float temperatura = 0.0;          //variável global para a temperatura do ar
 float umidadeAr = 0.0;            //variável global para a umidade do ar
 int umidadeSoloPercentual = 0;    //variável global para a umidade do solo em porcentagem
-int nivelAguaPercentual = 0;      //variável global para indicar se o nível de água está baixo
 int dados[5];                     //vetor para armazenar as configurações enviadas pelo app. Disposicao dos dados: {modo_de_operação, horas, minutos, acionamento_manual_da_bomba}
 bool flagBomba = false;           //flag para garantir que a bomba só seja acionada uma vez na IrrigaçãoPorHorario                   
 
@@ -31,7 +29,6 @@ void setup() {
   Serial1.begin(9600);                     //inicia a comunicação serial com o módulo bluetooth (HC-05)
   dht.begin();                             //inicia o objeto referente ao DHT11
   rtc.begin();                             //inicia o objeto referente ao módulo RTC DS3231
-  pinMode(PIN_BOIA, INPUT_PULLUP);         //configura o pino conectado à boia
   pinMode(rele, OUTPUT);
   digitalWrite(rele,HIGH);
   Serial.println("RegaBot - Módulo de Sensores Iniciado");
@@ -58,12 +55,6 @@ void lerSensores() {
   umidadeSoloPercentual = map(valorBrutoSolo, 550, 850 , 100, 0);
   umidadeSoloPercentual = constrain(umidadeSoloPercentual, 0, 100);
  
-  int estadoBoia = digitalRead(PIN_BOIA);
-  if (estadoBoia == HIGH) {
-    nivelAguaPercentual = 100;   
-  } else {
-    nivelAguaPercentual = 0;     
-  }
 
   float t = dht.readTemperature();
   float h = dht.readHumidity();
@@ -78,7 +69,6 @@ void lerSensores() {
   Serial.println("--- Leitura dos Sensores ---");
   Serial.print("Solo (bruto): "); Serial.print(valorBrutoSolo);
   Serial.print(" -> Solo (%): "); Serial.println(umidadeSoloPercentual);
-  Serial.print("Nível água: "); Serial.println(nivelAguaPercentual);
   Serial.print("Temperatura: "); Serial.print(temperatura); Serial.println(" °C");
   Serial.print("Umidade ar: "); Serial.print(umidadeAr); Serial.println(" %");
   Serial.println("----------------------------");
@@ -92,8 +82,6 @@ void enviarDadosApp() {                             //envia os dados dos sensore
   Serial1.print("|");
   Serial1.print(umidadeSoloPercentual);
   Serial1.print("|");
-  Serial1.print(nivelAguaPercentual);
-  Serial1.print("|");
   Serial1.print(dados[1]);
   Serial1.print("|");
   Serial1.print(dados[2]);
@@ -103,7 +91,6 @@ void enviarDadosApp() {                             //envia os dados dos sensore
   Serial.print(temperatura); Serial.print("|");
   Serial.print(umidadeAr); Serial.print("|");
   Serial.print(umidadeSoloPercentual); Serial.print("|");
-  Serial.print(nivelAguaPercentual); Serial.print("|");
   Serial.print(dados[1]); Serial.print("|");
   Serial.println(dados[2]);
   DateTime hora = rtc.now();
