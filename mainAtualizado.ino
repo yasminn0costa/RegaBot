@@ -14,7 +14,8 @@ float temperatura = 0.0;          //variável global para a temperatura do ar
 float umidadeAr = 0.0;            //variável global para a umidade do ar
 int umidadeSoloPercentual = 0;    //variável global para a umidade do solo em porcentagem
 int dados[5];                     //vetor para armazenar as configurações enviadas pelo app. Disposicao dos dados: {modo_de_operação, horas, minutos, acionamento_manual_da_bomba}
-bool flagBomba = false;           //flag para garantir que a bomba só seja acionada uma vez na IrrigaçãoPorHorario                   
+bool flagBomba = false;           //flag para garantir que a bomba só seja acionada uma vez na IrrigaçãoPorHorario   
+unsigned long inicio;                
 
 void lerSensores();               //função que vai ler os dados dos sensores
 void enviarDadosApp();            //função que envia os dados para o aplicativo
@@ -32,7 +33,7 @@ void setup() {
   pinMode(rele, OUTPUT);
   digitalWrite(rele,HIGH);
   Serial.println("RegaBot - Módulo de Sensores Iniciado");
-  //rtc.adjust(DateTime(2026, 5, 29, 14, 30, 00));              //ajustar tempo: ano, mes, dia, horas, minutos, segundos. Descomentar quando quiser ajustar
+  rtc.adjust(DateTime(2026, 6, 12, 14, 32, 00));              //ajustar tempo: ano, mes, dia, horas, minutos, segundos. Descomentar quando quiser ajustar
   delay(100);
 }
 
@@ -130,7 +131,6 @@ void irrigacaoAutomatica() {
 
 
 void IrrigacaoPorHorario(){
-  unsigned long inicio;
   DateTime agora = rtc.now();                                               //lê o horário atual
   if((dados[1]==agora.hour())&&(dados[2]==agora.minute())&&!flagBomba){     //compara se o horário atual é igual ao horário definido para ligar a bomba
     LigarBomba();                                                           //chama a função LigarBomba()
