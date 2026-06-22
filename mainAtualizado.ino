@@ -124,7 +124,7 @@ void LerDadosApp(){
 
 
 void irrigacaoAutomatica() {
-  if (umidadeSoloPercentual <= 5) {
+  if (umidadeSoloPercentual >= 2 && umidadeSoloPercentual <= 30) {
     LigarBomba();
   }
 }
