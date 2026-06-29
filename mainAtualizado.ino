@@ -147,11 +147,11 @@ void LigarBomba(){ //ainda sofrerá alterações
   digitalWrite(rele, LOW); //liga a bomba toda vez que a função for chamada
   
   if(temperatura>=26){ //quando estiver mais quente, a planta será irrigada por mais tempo
-     delay(10000); //tempo será ajustado com testes experimentais
+     delay(7000); //tempo será ajustado com testes experimentais
      digitalWrite(rele, HIGH);  //depois de um intervalo de tempo a bomba será desligada
   }
   else{ //temperatura normal
-    delay(5000);
+    delay(4000);
     digitalWrite(rele, HIGH);  //depois de um intervalo de tempo a bomba será desligada
   }
 }
