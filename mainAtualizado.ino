@@ -33,7 +33,7 @@ void setup() {
   pinMode(rele, OUTPUT);
   digitalWrite(rele,HIGH);
   Serial.println("RegaBot - Módulo de Sensores Iniciado");
-  rtc.adjust(DateTime(2026, 6, 12, 14, 32, 00));              //ajustar tempo: ano, mes, dia, horas, minutos, segundos. Descomentar quando quiser ajustar
+  rtc.adjust(DateTime(2026, 6, 30, 11, 10 , 00));              //ajustar tempo: ano, mes, dia, horas, minutos, segundos. Descomentar quando quiser ajustar
   delay(100);
 }
 
@@ -147,11 +147,11 @@ void LigarBomba(){ //ainda sofrerá alterações
   digitalWrite(rele, LOW); //liga a bomba toda vez que a função for chamada
   
   if(temperatura>=26){ //quando estiver mais quente, a planta será irrigada por mais tempo
-     delay(7000); //tempo será ajustado com testes experimentais
+     delay(10000); //tempo será ajustado com testes experimentais
      digitalWrite(rele, HIGH);  //depois de um intervalo de tempo a bomba será desligada
   }
   else{ //temperatura normal
-    delay(4000);
+    delay(6000);
     digitalWrite(rele, HIGH);  //depois de um intervalo de tempo a bomba será desligada
   }
 }
